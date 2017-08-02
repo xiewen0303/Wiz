@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!--defaultCSS-->
+<title>java大小端问题</title>
+
+
+
+<style type="text/css" id="wiz_custom_css">
+body
+{
+    font-family: 微软雅黑,"Microsoft YaHei", Georgia,Helvetica,Arial,sans-serif,宋体, PMingLiU,serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+}
+html, body
+{
+    
+    
+}
+h1 {
+    font-size:1.5em;
+    font-weight:bold;
+}
+h2 {
+    font-size:1.4em;
+    font-weight:bold;
+}
+h3 {
+    font-size:1.3em;
+    font-weight:bold;
+}
+h4 {
+    font-size:1.2em;
+    font-weight:bold;
+}
+h5 {
+    font-size:1.1em;
+    font-weight:bold;
+}
+h6 {
+    font-size:1.0em;
+    font-weight:bold;
+}
+img {
+    border:0;
+    max-width: 100%;
+    height: auto !important;
+}
+blockquote {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+table {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+td {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+</style>
+
+<style type="text/css" id="wiz_todo_style_id" wiz_link_version="01.00.09">.wiz-todo, .wiz-todo-img {width: 16px; height: 16px; cursor: default; padding: 0 10px 0 2px; vertical-align: -10%;-webkit-user-select: none;} .wiz-todo-label { display: inline-block; padding-top: 7px; padding-bottom: 6px; line-height: 1.5;} .wiz-todo-label-checked {  color: #666;} .wiz-todo-label-unchecked {text-decoration: initial;} .wiz-todo-completed-info {padding-left: 44px; display: inline-block; } .wiz-todo-avatar { width:20px; height: 20px; vertical-align: -20%; margin-right:10px; border-radius: 2px;} .wiz-todo-account, .wiz-todo-dt { color: #666; }</style></head>
+
+<body  style=""><div><!--WizRtf2Html Charset=0  --><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">ByteBuffer&nbsp;<span style="text-decoration:underline;">buffer</span>=&nbsp;ByteBuffer.<span style="font-style:italic;">allocate</span>(4);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;<span style="color:#3f7f5f;">//&nbsp;<span style="text-decoration:underline;">jvm</span>&nbsp;默认的是大端</span></span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">buffer.order(ByteOrder.<span style="font-style:italic;color:#0000c0;">BIG_ENDIAN</span>);&nbsp;<span style="color:#3f7f5f;">//大端</span></span></div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">buffer.order(ByteOrder.<span style="font-style:italic;color:#0000c0;">LITTLE_ENDIAN</span>);<span style="color:#3f7f5f;">//小端</span></span><div><br></div><div><br></div><div>如：</div><div><!--WizRtf2Html Charset=0  --><span style="font-family: Consolas; font-size: 10.5pt; line-height: 1.5;">&nbsp; &nbsp;&nbsp;</span><span style="font-family: Consolas; font-size: 10.5pt; line-height: 1.5;">&nbsp; &nbsp;&nbsp;</span><span style="font-family: Consolas; font-size: 10.5pt; line-height: 1.5;">&nbsp; &nbsp;&nbsp;</span><span style="font-family: Consolas; font-size: 10.5pt; line-height: 1.5;">&nbsp; &nbsp;</span><span style="color: windowtext; font-family: Consolas; font-size: 14pt; line-height: 1.5;">ByteBuffer&nbsp;buffer=&nbsp;</span><span style="color: windowtext; font-family: Consolas; font-size: 14pt; line-height: 1.5;">ByteBuffer</span><span style="color: windowtext; font-family: Consolas; font-size: 14pt; line-height: 1.5;">.</span><span style="color: windowtext; font-family: Consolas; font-size: 14pt; line-height: 1.5; font-style: italic;">allocate</span><span style="color: windowtext; font-family: Consolas; font-size: 14pt; line-height: 1.5;">(4);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer.order(ByteOrder.<span style="font-style:italic;color:#0000c0;">BIG_ENDIAN</span>);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer.putInt(4);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold;color:#7f0055;">for</span>&nbsp;(<span style="font-weight:bold;color:#7f0055;">byte</span>&nbsp;b1&nbsp;:&nbsp;buffer.array())&nbsp;{</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.<span style="font-style:italic;color:#0000c0;">out</span>.println(b1);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ByteBuffer&nbsp;buffer2=&nbsp;ByteBuffer.<span style="font-style:italic;">allocate</span>(4);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer2.order(ByteOrder.<span style="font-style:italic;color:#0000c0;">LITTLE_ENDIAN</span>);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer2.putInt(4);</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold;color:#7f0055;">for</span>&nbsp;(<span style="font-weight:bold;color:#7f0055;">byte</span>&nbsp;b1&nbsp;:&nbsp;buffer2.array())&nbsp;{</span></div><div><span style="font-size:14pt;color:WindowText;font-family:'Consolas';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.<span style="font-style:italic;color:#0000c0;">out</span>.println(b1);</span></div><div><span style="color: windowtext; font-family: Consolas; font-size: 14pt; line-height: 1.5;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</span>&nbsp;&nbsp;<br></div></body></html>

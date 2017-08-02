@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!--defaultCSS-->
+<title>mongodb第三天</title>
+
+
+
+<style type="text/css" id="wiz_custom_css">
+body
+{
+    font-family: 微软雅黑,"Microsoft YaHei", Georgia,Helvetica,Arial,sans-serif,宋体, PMingLiU,serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+}
+html, body
+{
+    
+    
+}
+h1 {
+    font-size:1.5em;
+    font-weight:bold;
+}
+h2 {
+    font-size:1.4em;
+    font-weight:bold;
+}
+h3 {
+    font-size:1.3em;
+    font-weight:bold;
+}
+h4 {
+    font-size:1.2em;
+    font-weight:bold;
+}
+h5 {
+    font-size:1.1em;
+    font-weight:bold;
+}
+h6 {
+    font-size:1.0em;
+    font-weight:bold;
+}
+img {
+    border:0;
+    max-width: 100%;
+    height: auto !important;
+}
+blockquote {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+table {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+td {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+</style>
+
+<style type="text/css" id="wiz_todo_style_id" wiz_link_version="01.00.09">.wiz-todo, .wiz-todo-img {width: 16px; height: 16px; cursor: default; padding: 0 10px 0 2px; vertical-align: -10%;-webkit-user-select: none;} .wiz-todo-label { display: inline-block; padding-top: 7px; padding-bottom: 6px; line-height: 1.5;} .wiz-todo-label-checked {  color: #666;} .wiz-todo-label-unchecked {text-decoration: initial;} .wiz-todo-completed-info {padding-left: 44px; display: inline-block; } .wiz-todo-avatar { width:20px; height: 20px; vertical-align: -20%; margin-right:10px; border-radius: 2px;} .wiz-todo-account, .wiz-todo-dt { color: #666; }</style></head>
+
+<body  style=""><div id="cnblogs_post_body" style="margin: 0px 0px 30px; padding: 0px; word-break: break-word; overflow: auto; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);"><div style="margin: 0px; padding: 0px;"><p style="margin: 10px auto; padding: 0px;">一： 聚合</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; 常见的聚合操作跟sql server一样，有：count，distinct，group，mapReduce。</p><p style="margin: 10px auto; padding: 0px;">&lt;1&gt; count</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp; count是最简单，最容易，也是最常用的聚合工具，它的使用跟我们C#里面的count使用简直一模一样。</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/3ac8006b-9562-485f-9d97-8392cdb4b6ac.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px;">&nbsp;</p><p style="margin: 10px auto; padding: 0px;">&lt;2&gt; distinct</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;这个操作相信大家也是非常熟悉的，指定了谁，谁就不能重复，直接上图。</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/a5218a65-2e03-4c90-8c5f-a7c68ab023a7.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px;">&nbsp;</p><p style="margin: 10px auto; padding: 0px;">&lt;3&gt; group</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; 在mongodb里面做group操作有点小复杂，不过大家对sql server里面的group比较熟悉的话还是一眼</p><p style="margin: 10px auto; padding: 0px;">能看的明白的，其实group操作本质上形成了一种“k-v”模型，就像C#中的Dictionary，好，有了这种思维，</p><p style="margin: 10px auto; padding: 0px;">我们来看看如何使用group。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; 下面举的例子就是按照age进行group操作，value为对应age的姓名。下面对这些参数介绍一下：</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;key： &nbsp;这个就是分组的key，我们这里是对年龄分组。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;initial: 每组都分享一个”初始化函数“，特别注意：是每一组，比如这个的age=20的value的list分享一个</p><p style="margin: 10px auto; padding: 0px;">initial函数，age=22同样也分享一个initial函数。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;$reduce: 这个函数的第一个参数是当前的文档对象，第二个参数是上一次function操作的累计对象，第一次</p><p style="margin: 10px auto; padding: 0px;">为initial中的{”perosn“：[]}。有多少个文档， $reduce就会调用多少次。</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/7cd2c03e-28e0-466d-8f60-4d0395dfa460.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp;看到上面的结果，是不是有点感觉，我们通过age查看到了相应的name人员，不过有时我们可能有如下的要求：</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp;①：想过滤掉age&gt;25一些人员。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp;②：有时person数组里面的人员太多，我想加上一个count属性标明一下。</p><p style="margin: 10px auto; padding: 0px;">&nbsp;针对上面的需求，在group里面还是很好办到的，因为group有这么两个可选参数: condition 和 finalize。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp;condition: &nbsp;这个就是过滤条件。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp;finalize:这是个函数，每一组文档执行完后，多会触发此方法，那么在每组集合里面加上count也就是它的活了。</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/319b0392-05f5-47cd-9fb5-31454fd2c898.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px;">&nbsp;</p><p style="margin: 10px auto; padding: 0px;">&lt;4&gt; mapReduce</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp; 这玩意算是聚合函数中最复杂的了，不过复杂也好，越复杂就越灵活。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; mapReduce其实是一种编程模型，用在分布式计算中，其中有一个“map”函数，一个”reduce“函数。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp;① map：</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 这个称为映射函数，里面会调用emit(key,value)，集合会按照你指定的key进行映射分组。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp;② reduce：</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;这个称为简化函数，会对map分组后的数据进行分组简化，注意：在reduce(key,value)中的key就是</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; emit中的key，vlaue为emit分组后的emit(value)的集合，这里也就是很多{"count":1}的数组。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp;③ mapReduce:</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 这个就是最后执行的函数了，参数为map，reduce和一些可选参数。具体看图可知：</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/8dcb22ad-b41d-4a9c-9c1e-87baaeccc48d.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px;">&nbsp;</p><p style="margin: 10px auto; padding: 0px;">从图中我们可以看到如下信息：</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;result: "存放的集合名“；</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;input:传入文档的个数。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;emit：此函数被调用的次数。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;reduce：此函数被调用的次数。</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; &nbsp;output:最后返回文档的个数。</p><p style="margin: 10px auto; padding: 0px;">最后我们看一下“collecton”集合里面按姓名分组的情况。</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/c86bd127-ac6a-4cb0-9441-4b9bfce93556.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px;">&nbsp;</p><p style="margin: 10px auto; padding: 0px;">二：游标</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; mongodb里面的游标有点类似我们说的C#里面延迟执行，比如：</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; &nbsp; var list=db.person.find();</p><p style="margin: 10px auto; padding: 0px;">&nbsp; &nbsp; 针对这样的操作，list其实并没有获取到person中的文档，而是申明一个“查询结构”，等我们需要的时候通过</p><p style="margin: 10px auto; padding: 0px;">for或者next()一次性加载过来，然后让游标逐行读取，当我们枚举完了之后，游标销毁，之后我们在通过list获取时，</p><p style="margin: 10px auto; padding: 0px;">发现没有数据返回了。</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/8cd79c38-6b80-4a96-a8ce-68db3a97f473.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px;">&nbsp;</p><p style="margin: 10px auto; padding: 0px;">当然我们的“查询构造”还可以搞的复杂点，比如分页，排序都可以加进去。</p><p style="margin: 10px auto; padding: 0px;">&nbsp;var single=db.person.find().sort({"name",1}).skip(2).limit(2);</p><p style="margin: 10px auto; padding: 0px;">那么这样的“查询构造”可以在我们需要执行的时候执行，大大提高了不必要的花销。</p><p style="margin: 10px auto; padding: 0px;"><img src="mongodb第三天_files/9188c412-a69a-4bd7-ac9f-2e191f1e2702.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><div><br><div style="color:gray"><small>来源：&nbsp;&lt;<a href="http://www.cnblogs.com/huangxincheng/archive/2012/02/21/2361205.html">http://www.cnblogs.com/huangxincheng/archive/2012/02/21/2361205.html</a><small>&gt;</small></small></div><small><small>&nbsp;</small></small><br></div></div></div><div class="clear" style="margin: 0px; padding: 0px; clear: both; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);"></div><div id="blog_post_info_block" style="margin: 20px 0px 0px; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);"></div></body></html>

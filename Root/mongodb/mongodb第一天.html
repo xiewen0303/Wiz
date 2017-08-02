@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!--defaultCSS-->
+<title>mongodb第一天</title>
+
+
+
+<style type="text/css" id="wiz_custom_css">
+body
+{
+    font-family: 微软雅黑,"Microsoft YaHei", Georgia,Helvetica,Arial,sans-serif,宋体, PMingLiU,serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+}
+html, body
+{
+    
+    
+}
+h1 {
+    font-size:1.5em;
+    font-weight:bold;
+}
+h2 {
+    font-size:1.4em;
+    font-weight:bold;
+}
+h3 {
+    font-size:1.3em;
+    font-weight:bold;
+}
+h4 {
+    font-size:1.2em;
+    font-weight:bold;
+}
+h5 {
+    font-size:1.1em;
+    font-weight:bold;
+}
+h6 {
+    font-size:1.0em;
+    font-weight:bold;
+}
+img {
+    border:0;
+    max-width: 100%;
+    height: auto !important;
+}
+blockquote {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+table {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+td {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+</style>
+
+<style type="text/css" id="wiz_todo_style_id" wiz_link_version="01.00.09">.wiz-todo, .wiz-todo-img {width: 16px; height: 16px; cursor: default; padding: 0 10px 0 2px; vertical-align: -10%;-webkit-user-select: none;} .wiz-todo-label { display: inline-block; padding-top: 7px; padding-bottom: 6px; line-height: 1.5;} .wiz-todo-label-checked {  color: #666;} .wiz-todo-label-unchecked {text-decoration: initial;} .wiz-todo-completed-info {padding-left: 44px; display: inline-block; } .wiz-todo-avatar { width:20px; height: 20px; vertical-align: -20%; margin-right:10px; border-radius: 2px;} .wiz-todo-account, .wiz-todo-dt { color: #666; }</style></head>
+
+<body  style=""><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">三：基本操作</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp;由于是开篇，就大概的说下基本的“增删查改“，我们再开一个cmd，输入mongo命令打开shell，其实这个shell就是mongodb的客户端，</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">同时也是一个js的编译器，默认连接的是“test”数据库。</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp;&nbsp;<img src="mongodb第一天_files/fff39182-2268-44c4-b1a4-d6b795002985.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &lt;1&gt; &nbsp;insert 操作</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;好，数据库有了，下一步就是集合，这里就取集合名为“person”，要注意的就是文档是一个json的扩展（Bson)形式。</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp;&nbsp;<img src="mongodb第一天_files/43a154a5-aaf2-4188-9dbd-a9e4816d78c7.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &lt;2&gt; find 操作</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp;我们将数据插入后，肯定是要find出来，不然插了也白插，这里要注意两点：</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;① “_id"： 这个字段是数据库默认给我们加的GUID，目的就是保证数据的唯一性。</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;② 严格的按照Bson的形式书写文档，不过也没关系，错误提示还是很强大的。</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;<img src="mongodb第一天_files/dfb9c85a-3267-4188-8b99-2643b75b04f2.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;&lt;3&gt; update操作</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; update方法的第一个参数为“查找的条件”，第二个参数为“更新的值”，学过C#，相信还是很好理解的。</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;<img src="mongodb第一天_files/094c2b7a-196b-401c-a8cb-d9aa2c18a2c0.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;"></p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&lt;4&gt; remove操作</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; remove中如果不带参数将删除所有数据，呵呵，很危险的操作，在mongodb中是一个不可撤回的操作，三思而后行。</p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);"><img src="mongodb第一天_files/3ad77502-0129-4afb-9115-83ac48de28fe.png" alt="" style="margin: 0px; padding: 0px; max-width: 1000px;" name=""></p><p style="margin: 10px auto; padding: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13.92px; line-height: 20.88px; widows: 1; background-color: rgb(255, 255, 255);"><br></p></body></html>

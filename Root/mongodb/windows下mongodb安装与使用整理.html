@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!--defaultCSS-->
+<title>windows下mongodb安装与使用整理</title>
+
+
+
+<style type="text/css" id="wiz_custom_css">
+body
+{
+    font-family: 微软雅黑,"Microsoft YaHei", Georgia,Helvetica,Arial,sans-serif,宋体, PMingLiU,serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+}
+html, body
+{
+    
+    
+}
+h1 {
+    font-size:1.5em;
+    font-weight:bold;
+}
+h2 {
+    font-size:1.4em;
+    font-weight:bold;
+}
+h3 {
+    font-size:1.3em;
+    font-weight:bold;
+}
+h4 {
+    font-size:1.2em;
+    font-weight:bold;
+}
+h5 {
+    font-size:1.1em;
+    font-weight:bold;
+}
+h6 {
+    font-size:1.0em;
+    font-weight:bold;
+}
+img {
+    border:0;
+    max-width: 100%;
+    height: auto !important;
+}
+blockquote {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+table {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+td {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+</style>
+
+<style type="text/css" id="wiz_todo_style_id" wiz_link_version="01.00.09">.wiz-todo, .wiz-todo-img {width: 16px; height: 16px; cursor: default; padding: 0 10px 0 2px; vertical-align: -10%;-webkit-user-select: none;} .wiz-todo-label { display: inline-block; padding-top: 7px; padding-bottom: 6px; line-height: 1.5;} .wiz-todo-label-checked {  color: #666;} .wiz-todo-label-unchecked {text-decoration: initial;} .wiz-todo-completed-info {padding-left: 44px; display: inline-block; } .wiz-todo-avatar { width:20px; height: 20px; vertical-align: -20%; margin-right:10px; border-radius: 2px;} .wiz-todo-account, .wiz-todo-dt { color: #666; }</style></head>
+
+<body  style=""><div id="header" style="margin-bottom: 0px; line-height: 2em; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 13px; widows: 1;"><h1 style="margin: 0px;"><a id="Header1_HeaderTitle" href="http://www.cnblogs.com/lecaf/" style="color: rgb(51, 102, 153); text-decoration: none; font-size: 22px;"><h1 style="margin: 0px;"><span style="line-height: 60px; font-size: 40px; color: rgb(102, 102, 102);"></span></h1></a></h1><div style="padding: 10px 0px 0px 50px;"><a id="cb_post_title_url" href="http://www.cnblogs.com/lecaf/p/mongodb.html" style="font-size: 1.4em; font-weight: bold; line-height: 20.8px; color: rgb(51, 102, 153);">windows下mongodb安装与使用整理</a></div></div><div id="post_detail" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 13px; line-height: 20.8px; widows: 1;"><div class="post" style="padding-top: 10px; margin-bottom: 10px;"><div class="postText"><div id="cnblogs_post_body" style="margin-bottom: 20px; word-break: break-word;"><p style="margin: 10px auto;"><strong>一、首先安装mongodb</strong></p><p style="margin: 10px auto;">1.下载地址：<a href="http://www.mongodb.org/downloads" style="color: rgb(7, 93, 179);">http://www.mongodb.org/downloads</a></p><p style="margin: 10px auto;">2.先将下载的文件安装。</p><p style="margin: 10px auto;">3.创建文件夹d:\mongodb\data\db、d:\mongodb\data\log，分别用来安装db和日志文件，<span style="line-height: 19.5px;">在log文件夹下创建一个日志文件MongoDB.log，即d:\mongodb\data\log\MongoDB.log</span></p><p style="margin: 10px auto;">4.运行cmd.exe进入dos命令界面，执行下列命令</p><p style="margin: 10px auto;">　　&gt; cd d:\mongodb\bin</p><p style="margin: 10px auto;">　　&gt; d:\mongodb\bin&gt;mongod -dbpath "d:\mongodb\data\db"</p><p style="margin: 10px auto;"><img src="windows下mongodb安装与使用整理_files/8bc45009-9268-43aa-bfb9-c20942baf302.png" alt="" style="max-width: 1000px;"></p><p style="margin: 10px auto;"><span style="line-height: 19.5px;">　看到类似的信息，则说明启动成功，默认MongoDB监听的端口是27017，mysql的是3306</span></p><p style="margin: 10px auto;"><span style="line-height: 19.5px;">5.</span>测试连接</p><p style="margin: 10px auto;">　新开一个cmd窗口，进入mongodb的bin目录，输入mongo或者mongo.exe，出现如下信息说明测试通过，此时我们已经进入了test这个数据库，如何进入其他数据库下面会说。</p><p style="margin: 10px auto;">　<img src="windows下mongodb安装与使用整理_files/0819b719-88aa-4c45-8043-715c3930e19d.png" alt="" style="max-width: 1000px;"></p><p style="margin: 10px auto;">　输入exit或者ctrl+C可退出。</p><p style="margin: 10px auto;">&nbsp;6.当mongod.exe被关闭时，mongo.exe 就无法连接到数据库了，因此每次想使用mongodb数据库都要开启mongod.exe程序，所以比较麻烦，此时我们可以将<span style="line-height: 1.5;">MongoDB安装为windows服务</span></p><p style="margin: 10px auto;"><span style="line-height: 1.5;">　还是运行cmd，进入bin文件夹，执行下列命令</span></p><p style="margin: 10px auto;"><span style="line-height: 1.5;">　</span>&gt; d:\mongodb\bin&gt;mongod --dbpath "d:\mongodb\data\db" --logpath "d:\mongodb\data\log\MongoDB.log" --install --serviceName "MongoDB"</p><p style="margin: 10px auto;">　这里MongoDB.log就是开始建立的日志文件，--serviceName "MongoDB" 服务名为MongoDB</p><p style="margin: 10px auto;">　接着<span style="line-height: 19.5px;">启动mongodb服务</span></p><p style="margin: 10px auto;">　<span style="line-height: 19.5px;">&gt;&nbsp;d:\mongodb\bin&gt;NET START MongoDB</span></p><p style="margin: 10px auto;"><span style="line-height: 19.5px;">　<img src="windows下mongodb安装与使用整理_files/40abaa8b-980b-4681-b6fb-05ce2586c665.jpg" alt="" style="max-width: 1000px;"></span></p><p style="margin: 10px auto;"><span style="line-height: 19.5px;">　打开任务管理器，可以看到进程已经启动</span></p><p style="margin: 10px auto;"><span style="line-height: 19.5px;">7.关闭服务和删除进程</span></p><p style="margin: 10px auto;">　&gt; d:\mongodb\bin&gt;NET&nbsp;stop MongoDB&nbsp;&nbsp; (关闭服务)</p><p style="margin: 10px auto;">　&gt; d:\mongodb\bin&gt;mongod --dbpath "d:\mongodb\data\db" --logpath "d:\mongodb\data\log\MongoDB.log" --remove --serviceName "MongoDB"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (删除，注意不是--install了）&nbsp;</p><small><small></small></small></div></div></div></div></body></html>

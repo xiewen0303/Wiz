@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<!--defaultCSS-->
+<title>集群tomcat共享session</title>
+
+
+
+
+
+<style type="text/css" id="wiz_todo_style_id" wiz_link_version="01.00.09">.wiz-todo, .wiz-todo-img {width: 16px; height: 16px; cursor: default; padding: 0 10px 0 2px; vertical-align: -10%;-webkit-user-select: none;} .wiz-todo-label { display: inline-block; padding-top: 7px; padding-bottom: 6px; line-height: 1.5;} .wiz-todo-label-checked {  color: #666;} .wiz-todo-label-unchecked {text-decoration: initial;} .wiz-todo-completed-info {padding-left: 44px; display: inline-block; } .wiz-todo-avatar { width:20px; height: 20px; vertical-align: -20%; margin-right:10px; border-radius: 2px;} .wiz-todo-account, .wiz-todo-dt { color: #666; }</style>
+<style type="text/css" id="wiz_custom_css">
+body
+{
+    font-family: 微软雅黑,"Microsoft YaHei", Georgia,Helvetica,Arial,sans-serif,宋体, PMingLiU,serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+}
+html, body
+{
+    
+    
+}
+h1 {
+    font-size:1.5em;
+    font-weight:bold;
+}
+h2 {
+    font-size:1.4em;
+    font-weight:bold;
+}
+h3 {
+    font-size:1.3em;
+    font-weight:bold;
+}
+h4 {
+    font-size:1.2em;
+    font-weight:bold;
+}
+h5 {
+    font-size:1.1em;
+    font-weight:bold;
+}
+h6 {
+    font-size:1.0em;
+    font-weight:bold;
+}
+img {
+    border:0;
+    max-width: 100%;
+    height: auto !important;
+}
+blockquote {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+table {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+td {
+    border-collapse:collapse;
+    border:1px solid #bbbbbb;
+}
+</style>
+
+</head>
+
+<body style="" ><b><span data-wiz-span="data-wiz-span" style="font-size: 16pt;">1:安装memcached&nbsp;</span></b><div>(<a href="http://zzstudy.offcn.com/archives/14266)">http://zzstudy.offcn.com/archives/14266)</a><div><br><div><font color="#ff0000">注意：</font><span style="color: rgb(255, 0, 0);">window 的memcached使用自定义端口可能会有bug,</span><br> <div><span style="margin: 0px; padding: 0px; border: 0px; font-stretch: inherit; font-size: 18px; line-height: 24.05px; font-family: Titillium, Arial, sans-serif; vertical-align: baseline; color: rgb(102, 102, 102); widows: 1; text-indent: 2em; background-color: rgb(255, 255, 255);">下载后解压，比如解压到D盘的memcached文件夹中<br></span><span style="margin: 0px; padding: 0px; border: 0px; font-stretch: inherit; font-size: 18px; line-height: 24.05px; font-family: Titillium, Arial, sans-serif; vertical-align: baseline; color: rgb(102, 102, 102); widows: 1; text-indent: 2em; background-color: rgb(255, 255, 255);">打开 开始–&gt;运行–&gt;cmd 调出命令窗口，使用命令进入到memcached的解压目录<br></span><span style="margin: 0px; padding: 0px; border: 0px; font-stretch: inherit; font-size: 18px; line-height: 24.05px; font-family: Titillium, Arial, sans-serif; vertical-align: baseline; color: rgb(102, 102, 102); widows: 1; text-indent: 2em; background-color: rgb(255, 255, 255);">安装memcached：输入D:\memcached\memcached.exe -d install ，安装完以后<br></span><span style="margin: 0px; padding: 0px; border: 0px; font-stretch: inherit; font-size: 18px; line-height: 24.05px; font-family: Titillium, Arial, sans-serif; vertical-align: baseline; color: rgb(102, 102, 102); widows: 1; text-indent: 2em; background-color: rgb(255, 255, 255);">启动memcached的服务：输入 “D:\memcached\memcached.exe -d start” 启动服务<br></span><span style="color: rgb(102, 102, 102); font-family: Titillium, Arial, sans-serif; font-size: 18px; line-height: 28.8px; widows: 1; background-color: rgb(255, 255, 255);">这样memcached就成为windows服务了。</span><br style="color: rgb(102, 102, 102); font-family: Titillium, Arial, sans-serif; font-size: 18px; line-height: 28.8px; widows: 1; background-color: rgb(255, 255, 255);"><span style="color: rgb(102, 102, 102); font-family: Titillium, Arial, sans-serif; font-size: 18px; line-height: 28.8px; widows: 1; background-color: rgb(255, 255, 255);">如果需要关闭memcached的服务，则输入:</span><br style="color: rgb(102, 102, 102); font-family: Titillium, Arial, sans-serif; font-size: 18px; line-height: 28.8px; widows: 1; background-color: rgb(255, 255, 255);"><span style="color: rgb(102, 102, 102); font-family: Titillium, Arial, sans-serif; font-size: 18px; line-height: 28.8px; widows: 1; background-color: rgb(255, 255, 255);">D:\memcached\memcached.exe -d stop|shutdown 进行关闭。设置memcached，启动该服务后，memcached服务默认占用的端口是11211，占用的最大内存默认是64M。</span><span style="margin: 0px; padding: 0px; border: 0px; font-stretch: inherit; font-size: 18px; line-height: 24.05px; font-family: Titillium, Arial, sans-serif; vertical-align: baseline; color: rgb(102, 102, 102); widows: 1; text-indent: 2em; background-color: rgb(255, 255, 255);">如果需要修改这两个参数，比如修改端口为10000，内存为512，则输入：&nbsp;</span><span style="margin: 0px; padding: 0px; border: 0px; font-stretch: inherit; font-size: 18px; line-height: 24.05px; font-family: Titillium, Arial, sans-serif; vertical-align: baseline; color: rgb(102, 102, 102); widows: 1; text-indent: 2em; background-color: rgb(255, 255, 255);">D:\memcached\memcached.exe -p 10000 -m 512 -d start , -p 表示要修改的端口， -m表示占用的最大内存(单位为M)。</span><span style="font-size: 10.5pt; line-height: 1.5;">&nbsp;</span></div><div><br></div><div><br><div><b><span data-wiz-span="data-wiz-span" style="font-size: 16pt;">2:安装nginx</span></b></div><div><font color="#ff0000">注意：nginx 在windows中可能会出现停不掉的现象,可以用任务管理器里直接关掉nginx服务</font></div><div><font color="#ff0000"><br></font></div><div><span style="color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; line-height: 25px; text-indent: 28px; widows: 1; background-color: rgb(255, 255, 255);">1：nginx也是一个服务器，这里我们主要是用来做代理和负载均衡的。当我们下载完nginx直接解压就可以用。</span></div><div><img src="集群tomcat共享session_files/a399aa0e-2f35-4f42-b13a-49fce749bd58.png" border="0" alt=""><br></div><div><br></div><div><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">2：启动nginx后，我们在浏览器输入127.0.0.1,出现如下界面就代表nginx已近启动了：</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;<img src="集群tomcat共享session_files/2e2ce7f2-2041-48b6-81c5-0378e03b87ed.png" alt="" style="border: 1px solid rgb(232, 232, 232); margin: 5px auto; display: block; box-shadow: rgb(204, 204, 204) 2px 2px 2px 0px; padding: 3px;" name=""></p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">3.接下来我们来配置nginx来做代理服务器和负载均衡：</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">打开nginx文件下的conf-&gt;nginx.conf文件，在hettp中添加</p><pre style="white-space: pre-wrap; word-wrap: break-word; color: rgb(51, 51, 51); line-height: 25px; widows: 1; background-color: rgb(255, 255, 255);">upstream 127.0.0.1{//这个127.0.0.1可以随便取个名字  server 127.0.0.1:8088 weight=1; #服务器A  server 127.0.0.1:9088 weight=1; #服务器B}</pre><br style="color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; line-height: 25px; widows: 1; background-color: rgb(255, 255, 255);"><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">在server中的location添加：</p><pre style="white-space: pre-wrap; word-wrap: break-word; color: rgb(51, 51, 51); line-height: 25px; widows: 1; background-color: rgb(255, 255, 255);"> proxy_pass http://127.0.0.1; #访问js，图片等需要做代理</pre><br style="color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; line-height: 25px; widows: 1; background-color: rgb(255, 255, 255);"><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">其他的现在不用配置，配置完了如下：</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);"><img src="集群tomcat共享session_files/305a18e3-3260-47b4-8617-47faa1e5e048.png" alt="" style="border: 1px solid rgb(232, 232, 232); margin: 5px auto; display: block; box-shadow: rgb(204, 204, 204) 2px 2px 2px 0px; padding: 3px;" name=""></p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">&nbsp; 说明：</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">　　1）server后的ip即使tomcat的ip,weight表示权重，weight越大，对应服务器被访问的概率越大，若是相等，几个服务器轮流被访问；</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;&nbsp;&nbsp; 2）proxy_pass&nbsp; 后的http必须加上；</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);"><br></p><div style="color:gray"><small><small></small></small></div><small><small>&nbsp;&nbsp;</small></small><span style="color: rgb(128, 128, 128); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; font-size: 12px; line-height: 25px; text-indent: 28px; widows: 1; background-color: rgb(255, 255, 255);">来源：&nbsp;&lt;</span><a href="http://www.shaoqun.com/a/107182.aspx" style="font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; font-size: 12px; line-height: 25px; text-indent: 28px; widows: 1; background-color: rgb(255, 255, 255);">http://www.shaoqun.com/a/107182.aspx</a><small style="color: rgb(128, 128, 128); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; line-height: 25px; text-indent: 28px; widows: 1; background-color: rgb(255, 255, 255);">&gt;</small></div><div><small><small></small></small></div><div><b><span data-wiz-span="data-wiz-span" style="font-size: 16pt;">3:配置tomcat</span></b></div></div></div></div></div><div><b></b></div><div><span data-wiz-span="data-wiz-span" style="font-size:10.5pt"><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;然后在tomcat的context.</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">&nbsp;</p><pre style="white-space: pre-wrap; word-wrap: break-word; color: rgb(51, 51, 51); line-height: 25px; widows: 1; background-color: rgb(255, 255, 255);">&lt;Manager className="de.javakaffee.web.msm.MemcachedBackupSessionManager"           memcachedNodes="n1:127.0.0.1:11211"           sticky="false"           sessionBackupAsync="false"           lockingMode="auto"           requestUriIgnorePattern=".*\.(ico|png|gif|jpg|css|js)$"           transcoderFactoryClass="de.javakaffee.web.msm.JavaSerializationTranscoderFactory"           /&gt;</pre><br style="color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; line-height: 25px; widows: 1; background-color: rgb(255, 255, 255);"><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);">如下：</p><p style="margin: 20px 0px 0px; padding: 0px; word-wrap: break-word; text-indent: 2em; line-height: 25px; color: rgb(51, 51, 51); font-family: tahoma, 'Hiragino Sans GB', 宋体, sans-serif; widows: 1; background-color: rgb(255, 255, 255);"><img src="集群tomcat共享session_files/e4c5c28c-34d3-4f94-9949-b31957b011d7.png" alt="" style="border: 1px solid rgb(232, 232, 232); margin: 5px auto; display: block; box-shadow: rgb(204, 204, 204) 2px 2px 2px 0px; padding: 3px;"><br></p><div style="color:gray"><small>来源：&nbsp;&lt;<a href="http://www.shaoqun.com/a/107182.aspx">http://www.shaoqun.com/a/107182.aspx</a><small>&gt;</small></small></div><small><small>&nbsp;</small></small><p></p></span></div></body></html>
